@@ -15,35 +15,34 @@ for i=3:length(txt_filename) % find the txt file to get the start and end slice 
     if(isempty(strfind(txt_filename(i).name,'.txt')))
         continue;
     end
-    
+
     fid = fopen(strcat(Dir_seg,txt_filename(i).name),'r');
-    
+
     id = fgetl(fid);
-   
+
 %start slice number is positioned at the 7th line in the text file
 %we will loop through the lines until we reach the 6th line
 %we skipped a line because of the id number line saved in id so its gonna
 %be loop until 6 not 7
-    for s=1:6  
+    for s=1:6
         ne = fgetl(fid);
     end
-    
+
     start_slice = str2double(ne);
     end_slice = str2double(fgetl(fid));
-    
+
     for j=start_slice:end_slice % loop through selected dicom images
         sli = num2str(j);%convert dicom slice number to string to be used in filename
-        
+
         if j < 100
             slice_num = strcat('0',sli); %add zero to the begining if its less than 100
         else
             slice_num = sli;
         end
-        
+
         dic_img = dicomread(strcat(Dir_seg,slice_num));%read dicom file
-        dcmi = imadjust(dic_img);%adjust the contrast
-        new_name = strcat(Dir_seg,id,'\v00\',id,'_',sli, '.tiff');%create name
+        dcmi = uint8(dic_img);%convert to uint8
+        new_name = strcat(Dir_seg,id,'_',sli, '.tiff');%create name
         imwrite(dcmi,new_name,'tiff');%convert dicom file to tiff
     end
 end
-
