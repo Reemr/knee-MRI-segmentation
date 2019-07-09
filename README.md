@@ -1,2 +1,2 @@
 # knee-MRI-segmentation
-This is our final work for the course project of Computer Vision.
+This is our final work of the course project for the Computer Vision class.
